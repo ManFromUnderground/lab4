@@ -42,10 +42,10 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         # make sure we process if the camera has started streaming images
         if img_received:
-            # flip the image up
-            flipped_img = cv2.flip(rgb_img, 0)
+            # 
+            ball = filter_image(rbg_img)
             # convert it to ros msg and publish it
-            img_msg = CvBridge().cv2_to_imgmsg(flipped_img, encoding="rgb8")
+            img_msg = CvBridge().cv2_to_imgmsg(ball, encoding="rgb8")
             # publish the image
             img_pub.publish(img_msg)
         # pause until the next iteration
