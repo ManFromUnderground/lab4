@@ -5,6 +5,8 @@ import cv2
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 
+# By Trey Castle
+
 img_received = False
 # define a 720x1280 3-channel image with all pixels equal to zero
 rgb_img = np.zeros((720, 1280, 3), dtype="uint8")
@@ -21,19 +23,18 @@ def get_image(ros_img):
 
 #filter out background color
 def mask(image):
-	#wid, height = image.shape
-	#print("width:", wid, "height:", height)
+	# constructs an image of a rectangle then ANDs it against the recieved image to cut out the background
 	filter = np.zeros((720, 1280), dtype="uint8")
 	start = (0, 160)
-	end = (960, 1280)
+	end = (720, 1280)
 	cv2.rectangle(filter, start, end, (255, 255, 255), -1)
 	masked = cv2.bitwise_and(image, filter)
 	return masked
 
-
+# identifies which parts of the image fall in the bounds of the ball
 def filter_image(image):
 	var = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-	lower_yellow = np.array([25,19,1])
+	lower_yellow = np.array([25,5,1])
 	upper_yellow = np.array([60,255,255])
 	yellow_mask = cv2.inRange(var, lower_yellow, upper_yellow)
 	return yellow_mask
